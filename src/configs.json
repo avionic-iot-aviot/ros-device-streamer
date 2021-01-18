@@ -1,0 +1,19 @@
+{
+  "device_status_path": "/home/pi/device-status",
+  "log_file": "/home/pi/device-streamer.log",
+  "mqtt_host": "192.168.100.214",
+  "mqtt_login": "vicosystems",
+  "mqtt_password": "ASdf0987",
+  "ca_cert": "/usr/local/vicosystems/device-streamer/ca_cert/ca.crt",
+  "username": "device",
+  "password": "device",
+  "api_schema": "http",
+  "api_host": "192.168.100.214",
+  "api_port": 5000,
+  "domain": "aviot.it",
+  "serial": "drone-1",
+  "gps_device": "/dev/ttyACM0",
+  "gps_dongle_baudrate": 9600,
+  "device_id": "ros_pi",
+  "audio_card": "C170"
+}
