@@ -14,5 +14,5 @@
   "gps_device": "/dev/ttyACM0",
   "gps_dongle_baudrate": 9600,
   "audio_card": "C170",
-  "mac_path": "/home/aviot/mac_edge0"
+  "mac_path": "/home/pi/mac_edge0"
 }
