@@ -55,9 +55,9 @@ API_PORT = configs["api_port"]
 AUDIO_CARD = configs["audio_card"]
 
 DOMAIN = configs["domain"]
-SERIAL = configs["serial"]
+SERIAL = "serial_"+mac
 
-device_id = configs["device_id"]
+device_id = "rpi_"+mac
 
 log_file = configs["log_file"]
 
@@ -438,11 +438,11 @@ if __name__ == '__main__':
     rospy.init_node(device_id)
 
     print("Subscribing to video streaming...")
-    rospy.Subscriber("/mavros/start_video_streaming", String, start_video_streaming_callback)
-    rospy.Subscriber("/mavros/stop_video_streaming", String, stop_video_streaming_callback)
+    rospy.Subscriber("/"+mac+"/start_video_streaming", String, start_video_streaming_callback)
+    rospy.Subscriber("/"+mac+"/stop_video_streaming", String, stop_video_streaming_callback)
     print("Subscribing to video room...")
-    rospy.Subscriber("/mavros/start_video_room", String, start_video_room_callback)
-    rospy.Subscriber("/mavros/stop_video_room", String, stop_video_room_callback)
+    rospy.Subscriber("/"+mac+"/start_video_room", String, start_video_room_callback)
+    rospy.Subscriber("/"+mac+"/stop_video_room", String, stop_video_room_callback)
     print("Ok")
     rospy.spin()
     

@@ -11,9 +11,8 @@
   "api_host": "192.168.100.214",
   "api_port": 5000,
   "domain": "aviot.it",
-  "serial": "drone-1",
   "gps_device": "/dev/ttyACM0",
   "gps_dongle_baudrate": 9600,
-  "device_id": "ros_pi",
-  "audio_card": "C170"
+  "audio_card": "C170",
+  "mac_path": "/home/aviot/mac_edge0"
 }
