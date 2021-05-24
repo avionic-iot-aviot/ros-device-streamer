@@ -43,6 +43,12 @@ configs = json.loads(json_file)
 status_path = configs["device_status_path"]
 
 
+# loading mac from mac file
+mac_path = configs["mac_path"]
+
+mac=open(mac_path, 'r').read()
+mac=mac.strip().replace(':','')
+
 # auth
 username = configs["username"]
 password = configs["password"]
