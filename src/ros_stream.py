@@ -65,6 +65,8 @@ SERIAL = "serial_"+mac
 
 device_id = "rpi_"+mac
 
+topic_name = "drone_"+mac
+
 log_file = configs["log_file"]
 
 
@@ -444,11 +446,11 @@ if __name__ == '__main__':
     rospy.init_node(device_id)
 
     print("Subscribing to video streaming...")
-    rospy.Subscriber("/"+mac+"/start_video_streaming", String, start_video_streaming_callback)
-    rospy.Subscriber("/"+mac+"/stop_video_streaming", String, stop_video_streaming_callback)
+    rospy.Subscriber("/"+topic_name+"/start_video_streaming", String, start_video_streaming_callback)
+    rospy.Subscriber("/"+topic_name+"/stop_video_streaming", String, stop_video_streaming_callback)
     print("Subscribing to video room...")
-    rospy.Subscriber("/"+mac+"/start_video_room", String, start_video_room_callback)
-    rospy.Subscriber("/"+mac+"/stop_video_room", String, stop_video_room_callback)
+    rospy.Subscriber("/"+topic_name+"/start_video_room", String, start_video_room_callback)
+    rospy.Subscriber("/"+topic_name+"/stop_video_room", String, stop_video_room_callback)
     print("Ok")
     rospy.spin()
     
