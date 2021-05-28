@@ -1,6 +1,6 @@
 {
-  "device_status_path": "/home/pi/device-status",
-  "log_file": "/home/pi/device-streamer.log",
+  "device_status_path": "~/device-status",
+  "log_file": "~/device-streamer.log",
   "mqtt_host": "192.168.100.214",
   "mqtt_login": "vicosystems",
   "mqtt_password": "ASdf0987",
@@ -14,5 +14,5 @@
   "gps_device": "/dev/ttyACM0",
   "gps_dongle_baudrate": 9600,
   "audio_card": "C170",
-  "mac_path": "/home/pi/mac_edge0"
+  "mac_path": "~/mac_edge0"
 }

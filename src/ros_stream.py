@@ -41,10 +41,12 @@ json_file = config_file.read()
 configs = json.loads(json_file)
 
 status_path = configs["device_status_path"]
+status_path = os.path.expanduser(status_path)
 
 
 # loading mac from mac file
 mac_path = configs["mac_path"]
+mac_path = os.path.expanduser(mac_path)
 
 mac=open(mac_path, 'r').read()
 mac=mac.strip().replace(':','')
@@ -68,6 +70,7 @@ device_id = "rpi_"+mac
 topic_name = "drone_"+mac
 
 log_file = configs["log_file"]
+log_file = os.path.expanduser(log_file)
 
 
 endpoint_auth = "/user/auth"
