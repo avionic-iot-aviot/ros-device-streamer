@@ -432,6 +432,12 @@ def stop_video_room_callback(data):
     print("Stopping video room uv4l")
     stop_uv4l()
 
+def rtt_test_callback(data):
+    print("Received rtt_test msg")
+    print("Sending rtt_resp msg")
+    pub.publish(String("foo"))
+
+
 if __name__ == '__main__':
 
     log_path = log_file if DEBUG else "/dev/null"
@@ -454,6 +460,11 @@ if __name__ == '__main__':
     print("Subscribing to video room...")
     rospy.Subscriber("/"+topic_name+"/start_video_room", String, start_video_room_callback)
     rospy.Subscriber("/"+topic_name+"/stop_video_room", String, stop_video_room_callback)
+    print("Subscribing to rtt test...")
+    rospy.Subscriber("/"+topic_name+"/rtt_test", String, rtt_test_callback)
+    print("Creating a publisher for rtt response...")
+    pub = rospy.Publisher("/"+topic_name+"/rtt_resp", String, queue_size=10)
+
     print("Ok")
     rospy.spin()
     
