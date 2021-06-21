@@ -181,9 +181,9 @@ def start_uv4l(vr_name, vr_pin, vr_usrnm, vr_secret, vr_server, vr_port):
             "proxy_bypass": "",
             "token": "",
             "publish": 1,
-            "subscribe": 1,
-            "hw_vcodec": 1,
-            "vformat": 40,
+            "subscribe": 0,
+            "hw_vcodec": 0,
+            "vformat": 60,
             "reconnect": 1,
             "action": "Start"
         }
