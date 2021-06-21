@@ -13,6 +13,6 @@
   "domain": "aviot.it",
   "gps_device": "/dev/ttyACM0",
   "gps_dongle_baudrate": 9600,
-  "audio_card": "C170",
+  "audio_card": "1",
   "mac_path": "~/mac_edge0"
 }
