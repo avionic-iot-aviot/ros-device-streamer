@@ -67,7 +67,7 @@ SERIAL = "serial_"+mac
 
 device_id = "rpi_"+mac
 
-topic_name = "drone_"+mac
+topic_name = "gw_"+mac
 
 log_file = configs["log_file"]
 log_file = os.path.expanduser(log_file)
