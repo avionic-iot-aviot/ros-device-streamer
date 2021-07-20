@@ -49,7 +49,7 @@ mac_path = configs["mac_path"]
 mac_path = os.path.expanduser(mac_path)
 
 mac=open(mac_path, 'r').read()
-mac=mac.strip().replace(':','')
+mac=mac.strip().replace(':','').lower()
 
 # auth
 username = configs["username"]
