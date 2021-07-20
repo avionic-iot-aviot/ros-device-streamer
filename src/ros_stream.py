@@ -435,7 +435,7 @@ def stop_video_room_callback(data):
 def rtt_test_callback(data):
     print("Received rtt_test msg")
     print("Sending rtt_resp msg")
-    pub.publish(String("foo"))
+    pub.publish(data)
 
 
 if __name__ == '__main__':
