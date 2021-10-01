@@ -9,6 +9,7 @@ import logging
 import logging.handlers
 import argparse
 import requests
+import PWM
 
 from std_msgs.msg import String
 from datetime import datetime
@@ -437,6 +438,12 @@ def rtt_test_callback(data):
     print("Sending rtt_resp msg")
     pub.publish(data)
 
+def servo_open_callback(data):
+    cmd = json.loads(data.data)
+    PWM.pwm(cmd["number"],'open')
+def servo_close_callback(data):
+    cmd = json.loads(data.data)
+    PWM.pwm(cmd["number"],'close')
 
 if __name__ == '__main__':
 
@@ -454,6 +461,8 @@ if __name__ == '__main__':
     print("Init ros node")
     rospy.init_node(device_id)
 
+    print("Creating a publisher for rtt response...")
+    pub = rospy.Publisher("/"+topic_name+"/rtt_resp", String, queue_size=10)
     print("Subscribing to video streaming...")
     rospy.Subscriber("/"+topic_name+"/start_video_streaming", String, start_video_streaming_callback)
     rospy.Subscriber("/"+topic_name+"/stop_video_streaming", String, stop_video_streaming_callback)
@@ -462,8 +471,10 @@ if __name__ == '__main__':
     rospy.Subscriber("/"+topic_name+"/stop_video_room", String, stop_video_room_callback)
     print("Subscribing to rtt test...")
     rospy.Subscriber("/"+topic_name+"/rtt_test", String, rtt_test_callback)
-    print("Creating a publisher for rtt response...")
-    pub = rospy.Publisher("/"+topic_name+"/rtt_resp", String, queue_size=10)
+    print("Subscribing to servo open...")
+    rospy.Subscriber("/"+topic_name+"/servo/open", String, servo_open_callback)
+    print("Subscribing to servo close...")
+    rospy.Subscriber("/"+topic_name+"/servo/close", String, servo_close_callback)
 
     print("Ok")
     rospy.spin()
