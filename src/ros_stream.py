@@ -21,7 +21,14 @@ from configparser import ConfigParser
 import ifaddr
 import socket
 
+import threading
+from threading import Timer
+
 DEBUG = True
+
+lock = threading.Lock()
+volume_timer=None
+volume_multiplier=12
 
 parser = argparse.ArgumentParser(
         description='Notify status change to MQTT broker'
@@ -442,7 +449,7 @@ def stop_video_room_callback(data):
 def rtt_test_callback(data):
     print("Received rtt_test msg")
     print("Sending rtt_resp msg")
-    pub.publish(data)
+    pub_rtt.publish(data)
 
 def servo_open_callback(data):
     cmd = json.loads(data.data)
@@ -450,6 +457,27 @@ def servo_open_callback(data):
 def servo_close_callback(data):
     cmd = json.loads(data.data)
     PWM.pwm(cmd["number"],'close')
+
+def set_volume_callback(data):
+    with lock:
+        cmd = json.loads(data.data)
+        volume_multiplier=cmd["volume"]
+
+        if volume_multiplier < 1:
+            volume_multiplier = 1
+        elif volume_multiplier > 50:
+            volume_multiplier = 50
+
+        print("Set volume: "+str(volume_multiplier))
+
+def send_volume():
+    with lock:
+        pub_volume.publish(str(volume_multiplier))
+    set_volume_timer()
+
+def set_volume_timer():
+    volume_timer=Timer(1,send_volume)
+    volume_timer.start()
 
 # ROS-DEVICE-STREAMER
 
@@ -465,7 +493,6 @@ def GetIp(interface):
             temp = adapter.ips[0].ip
     
     return temp
-
 
 
 if __name__ == '__main__':
@@ -485,7 +512,9 @@ if __name__ == '__main__':
     rospy.init_node(device_id)
 
     print("Creating a publisher for rtt response...")
-    pub = rospy.Publisher("/"+topic_name+"/rtt_resp", String, queue_size=10)
+    pub_rtt = rospy.Publisher("/"+topic_name+"/rtt_resp", String, queue_size=10)
+    print("Creating a publisher for volume...")
+    pub_volume = rospy.Publisher("/"+topic_name+"/volume", String, queue_size=10)
     print("Subscribing to video streaming...")
     rospy.Subscriber("/"+topic_name+"/start_video_streaming", String, start_video_streaming_callback)
     rospy.Subscriber("/"+topic_name+"/stop_video_streaming", String, stop_video_streaming_callback)
@@ -498,6 +527,8 @@ if __name__ == '__main__':
     rospy.Subscriber("/"+topic_name+"/servo/open", String, servo_open_callback)
     print("Subscribing to servo close...")
     rospy.Subscriber("/"+topic_name+"/servo/close", String, servo_close_callback)
+    print("Subscribing to set volume...")
+    rospy.Subscriber("/"+topic_name+"/set_volume", String, set_volume_callback)
 
     print("Ok")
     #rospy.spin()
@@ -508,24 +539,26 @@ if __name__ == '__main__':
     # Bind the socket to the port
     server_address = (GetIp(config['GENERAL']['InterfaceRasp']), int(config['GENERAL']['PortRasp']))
     s.bind(server_address)
-    volume_multiplier = 12
+
+
+    set_volume_timer()
 
     while True:
         ##print("####### Node is listening #######")
         data, address = s.recvfrom(8192)
-        if len(data) < 5:
-            try:
-                new_volume_multiplier = int(data)
-                if 1 < new_volume_multiplier < 50:
-                    volume_multiplier = new_volume_multiplier
-                elif new_volume_multiplier <= 1:
-                    volume_multiplier = 1
-                else:
-                    volume_multiplier = 50
-                print("New volume multiplier is: {}".format(volume_multiplier))
-            except:
-                print("Received a wrong value for volume_multiplier.")
-            continue
+        #if len(data) < 5:
+        #    try:
+        #        new_volume_multiplier = int(data)
+        #        if 1 < new_volume_multiplier < 50:
+        #            volume_multiplier = new_volume_multiplier
+        #        elif new_volume_multiplier <= 1:
+        #            volume_multiplier = 1
+        #        else:
+        #            volume_multiplier = 50
+        #        print("New volume multiplier is: {}".format(volume_multiplier))
+        #    except:
+        #        print("Received a wrong value for volume_multiplier.")
+        #    continue
         packet = Packets.getPacketFromBytes(data)
 
         if (packet.Destination == GetIp(config['GENERAL']['InterfaceRasp'])):
