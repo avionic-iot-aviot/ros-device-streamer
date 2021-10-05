@@ -460,8 +460,10 @@ def servo_close_callback(data):
 
 def set_volume_callback(data):
     with lock:
+        global volume_multiplier
+        
         cmd = json.loads(data.data)
-        volume_multiplier=cmd["volume"]
+        volume_multiplier=int(cmd["volume"])
 
         if volume_multiplier < 1:
             volume_multiplier = 1
