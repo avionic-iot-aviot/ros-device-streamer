@@ -538,8 +538,10 @@ if __name__ == '__main__':
     print('audio-receiver started')
     # Create a UDP socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # Get IP
+    ip=GetIp(config['GENERAL']['InterfaceRasp'])
     # Bind the socket to the port
-    server_address = (GetIp(config['GENERAL']['InterfaceRasp']), int(config['GENERAL']['PortRasp']))
+    server_address = (ip, int(config['GENERAL']['PortRasp']))
     s.bind(server_address)
 
 
@@ -564,7 +566,7 @@ if __name__ == '__main__':
             #    continue
             packet = Packets.getPacketFromBytes(data)
 
-            if (packet.Destination == GetIp(config['GENERAL']['InterfaceRasp'])):
+            if (packet.Destination == ip):
                 if(int(packet.Type) == 2):
                     elements = bytearray(packet.Payload)
                     bytes_to_write = bytearray()
